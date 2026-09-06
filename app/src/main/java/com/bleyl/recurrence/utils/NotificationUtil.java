@@ -15,11 +15,11 @@ import androidx.core.app.NotificationCompat;
 import androidx.preference.PreferenceManager;
 
 import com.bleyl.recurrence.R;
+import com.bleyl.recurrence.activities.MainActivity;
+import com.bleyl.recurrence.activities.ViewActivity;
 import com.bleyl.recurrence.models.Reminder;
 import com.bleyl.recurrence.receivers.DismissReceiver;
 import com.bleyl.recurrence.receivers.NagReceiver;
-import com.bleyl.recurrence.receivers.SnoozeActionReceiver;
-import com.bleyl.recurrence.activities.ViewActivity;
 
 import java.util.Calendar;
 
@@ -71,10 +71,13 @@ public class NotificationUtil {
         PendingIntent pending = PendingIntent.getActivity(context, reminder.getId(), viewIntent,
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        // Create intent for notification snooze click behaviour
-        Intent snoozeIntent = new Intent(context, SnoozeActionReceiver.class);
+        // Create intent for notification snooze click behaviour — direct activity PendingIntent
+        // so the system can reliably bring MainActivity to the foreground from any state.
+        Intent snoozeIntent = new Intent(context, MainActivity.class);
+        snoozeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         snoozeIntent.putExtra("NOTIFICATION_ID", reminder.getId());
-        PendingIntent pendingSnooze = PendingIntent.getBroadcast(context, reminder.getId(), snoozeIntent,
+        snoozeIntent.putExtra("SHOW_SNOOZE_DIALOG", true);
+        PendingIntent pendingSnooze = PendingIntent.getActivity(context, reminder.getId(), snoozeIntent,
             PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         int imageResId = context.getResources().getIdentifier(reminder.getIcon(), "drawable", context.getPackageName());

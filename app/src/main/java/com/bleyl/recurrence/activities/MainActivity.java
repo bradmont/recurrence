@@ -3,7 +3,9 @@ package com.bleyl.recurrence.activities;
 import android.Manifest;
 import android.app.AlarmManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
@@ -11,12 +13,16 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.NumberPicker;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.preference.PreferenceManager;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -24,6 +30,11 @@ import com.google.android.material.tabs.TabLayout;
 import com.bleyl.recurrence.R;
 import com.bleyl.recurrence.adapters.ReminderAdapter;
 import com.bleyl.recurrence.adapters.ViewPageAdapter;
+import com.bleyl.recurrence.receivers.SnoozeReceiver;
+import com.bleyl.recurrence.utils.AlarmUtil;
+import com.bleyl.recurrence.utils.NotificationUtil;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,6 +69,80 @@ public class MainActivity extends AppCompatActivity implements ReminderAdapter.R
         tabLayout.getTabAt(1).setIcon(R.drawable.selector_icon_inactive);
 
         requestRequiredPermissions();
+        checkForSnoozeIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        checkForSnoozeIntent(intent);
+    }
+
+    private void checkForSnoozeIntent(Intent intent) {
+        if (intent != null && intent.getBooleanExtra("SHOW_SNOOZE_DIALOG", false)) {
+            // Clear the flag so rotation/resume doesn't re-show the dialog
+            intent.removeExtra("SHOW_SNOOZE_DIALOG");
+            final int reminderId = intent.getIntExtra("NOTIFICATION_ID", 0);
+            // Cancel nag alarm if nagging is enabled (previously done in SnoozeActionReceiver)
+            if (PreferenceManager.getDefaultSharedPreferences(this)
+                    .getBoolean("checkBoxNagging", false)) {
+                Intent alarmIntent = new Intent(this, com.bleyl.recurrence.receivers.NagReceiver.class);
+                AlarmUtil.cancelAlarm(this, alarmIntent, reminderId);
+            }
+            showSnoozeDialog(reminderId);
+        }
+    }
+
+    private void showSnoozeDialog(final int reminderId) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        View view = getLayoutInflater().inflate(R.layout.number_picker, null);
+
+        final NumberPicker hourPicker = view.findViewById(R.id.picker1);
+        final NumberPicker minutePicker = view.findViewById(R.id.picker2);
+
+        // Hour picker 0–24
+        hourPicker.setMinValue(0);
+        hourPicker.setMaxValue(24);
+        hourPicker.setValue(prefs.getInt("snoozeHours", getResources().getInteger(R.integer.default_snooze_hours)));
+        String[] hourValues = new String[25];
+        for (int i = 0; i < hourValues.length; i++) {
+            hourValues[i] = String.format(getResources().getQuantityString(R.plurals.time_hour, i), i);
+        }
+        hourPicker.setDisplayedValues(hourValues);
+
+        // Minute picker 0–60
+        minutePicker.setMinValue(0);
+        minutePicker.setMaxValue(60);
+        minutePicker.setValue(prefs.getInt("snoozeMinutes", getResources().getInteger(R.integer.default_snooze_minutes)));
+        String[] minuteValues = new String[61];
+        for (int i = 0; i < minuteValues.length; i++) {
+            minuteValues[i] = String.format(getResources().getQuantityString(R.plurals.time_minute, i), i);
+        }
+        minutePicker.setDisplayedValues(minuteValues);
+
+        new AlertDialog.Builder(this, R.style.Dialog)
+            .setTitle(R.string.snooze_length)
+            .setView(view)
+            .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (hourPicker.getValue() != 0 || minutePicker.getValue() != 0) {
+                        NotificationUtil.cancelNotification(getApplicationContext(), reminderId);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.MINUTE, minutePicker.getValue());
+                        calendar.add(Calendar.HOUR, hourPicker.getValue());
+                        Intent alarmIntent = new Intent(getApplicationContext(), SnoozeReceiver.class);
+                        AlarmUtil.setAlarm(getApplicationContext(), alarmIntent, reminderId, calendar);
+                        prefs.edit()
+                            .putInt("snoozeHours", hourPicker.getValue())
+                            .putInt("snoozeMinutes", minutePicker.getValue())
+                            .apply();
+                    }
+                }
+            })
+            .setNegativeButton(android.R.string.cancel, null)
+            .show();
     }
 
     private void requestRequiredPermissions() {
