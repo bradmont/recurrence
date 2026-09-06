@@ -1,21 +1,15 @@
 package com.bleyl.recurrence.adapters;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
 
-import com.astuetz.PagerSlidingTabStrip;
 import com.bleyl.recurrence.fragments.TabFragment;
 import com.bleyl.recurrence.R;
 import com.bleyl.recurrence.models.Reminder;
 
-public class ViewPageAdapter extends FragmentPagerAdapter implements PagerSlidingTabStrip.CustomTabProvider {
+public class ViewPageAdapter extends FragmentPagerAdapter {
 
     private final int[] ICONS = {
             R.drawable.selector_icon_active,
@@ -23,29 +17,12 @@ public class ViewPageAdapter extends FragmentPagerAdapter implements PagerSlidin
     };
 
     public ViewPageAdapter(FragmentManager fm) {
-        super(fm);
-    }
-
-    @Override
-    public void tabUnselected(View view) {
-        view.setSelected(false);
-    }
-
-    @Override
-    public void tabSelected(View view) {
-        view.setSelected(true);
-    }
-
-    @Override
-    public View getCustomTabView(ViewGroup parent, int position) {
-        FrameLayout customLayout = (FrameLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.custom_tab, parent, false);
-        ((ImageView) customLayout.findViewById(R.id.image)).setImageResource(ICONS[position]);
-        return customLayout;
+        super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return super.getPageTitle(position);
+        return null;
     }
 
     @Override

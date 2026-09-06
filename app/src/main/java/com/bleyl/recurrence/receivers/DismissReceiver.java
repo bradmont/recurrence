@@ -3,7 +3,7 @@ package com.bleyl.recurrence.receivers;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 import com.bleyl.recurrence.utils.AlarmUtil;
 import com.bleyl.recurrence.utils.NotificationUtil;

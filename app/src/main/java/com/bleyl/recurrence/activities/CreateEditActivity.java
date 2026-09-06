@@ -2,30 +2,32 @@ package com.bleyl.recurrence.activities;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.ColorInt;
-import android.support.annotation.NonNull;
-import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SwitchCompat;
-import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
-import com.afollestad.materialdialogs.color.ColorChooserDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
 import com.bleyl.recurrence.database.DatabaseHelper;
 import com.bleyl.recurrence.dialogs.AdvancedRepeatSelector;
 import com.bleyl.recurrence.dialogs.DaysOfWeekSelector;
@@ -42,11 +44,12 @@ import com.bleyl.recurrence.utils.TextFormatUtil;
 
 import java.util.Calendar;
 
+import androidx.fragment.app.DialogFragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateEditActivity extends AppCompatActivity implements ColorChooserDialog.ColorCallback,
+public class CreateEditActivity extends AppCompatActivity implements
         IconPicker.IconSelectionListener, AdvancedRepeatSelector.AdvancedRepeatSelectionListener,
         DaysOfWeekSelector.DaysOfWeekSelectionListener, RepeatSelector.RepeatSelectionListener {
 
@@ -90,7 +93,6 @@ public class CreateEditActivity extends AppCompatActivity implements ColorChoose
 
         setSupportActionBar(toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-        if (getActionBar() != null) getActionBar().setDisplayHomeAsUpEnabled(true);
         if (getSupportActionBar() != null) getSupportActionBar().setTitle(null);
 
         calendar = Calendar.getInstance();
@@ -217,24 +219,52 @@ public class CreateEditActivity extends AppCompatActivity implements ColorChoose
     @OnClick(R.id.colour_select)
     public void colourSelector() {
         DatabaseHelper database = DatabaseHelper.getInstance(this);
-        int[] colours = database.getColoursArray();
+        final int[] colours = database.getColoursArray();
         database.close();
 
-        new ColorChooserDialog.Builder(this, R.string.select_colour)
-                .allowUserColorInputAlpha(false)
-                .customColors(colours, null)
-                .preselect(Color.parseColor(colour))
+        // Build a grid of colour swatches
+        int swatchSize = (int) (48 * getResources().getDisplayMetrics().density);
+        int swatchPadding = (int) (4 * getResources().getDisplayMetrics().density);
+        int cols = 5;
+
+        GridLayout grid = new GridLayout(this);
+        grid.setColumnCount(cols);
+        int rows = (int) Math.ceil((double) colours.length / cols);
+        grid.setRowCount(rows);
+
+        int paddingPx = (int) (16 * getResources().getDisplayMetrics().density);
+        grid.setPadding(paddingPx, paddingPx, paddingPx, paddingPx);
+
+        final androidx.appcompat.app.AlertDialog[] dialogRef = new androidx.appcompat.app.AlertDialog[1];
+
+        for (int i = 0; i < colours.length; i++) {
+            final int colourInt = colours[i];
+            View swatch = new View(this);
+            GridLayout.LayoutParams params = new GridLayout.LayoutParams();
+            params.width = swatchSize;
+            params.height = swatchSize;
+            params.setMargins(swatchPadding, swatchPadding, swatchPadding, swatchPadding);
+            swatch.setLayoutParams(params);
+            swatch.setBackgroundColor(colourInt);
+
+            swatch.setOnClickListener(v -> {
+                colour = String.format("#%06X", (0xFFFFFF & colourInt));
+                imageColourSelect.setColorFilter(colourInt);
+                colourText.setText(colour);
+                DatabaseHelper db = DatabaseHelper.getInstance(CreateEditActivity.this);
+                db.addColour(new Colour(colourInt, DateAndTimeUtil.toStringDateTimeWithSeconds(Calendar.getInstance())));
+                db.close();
+                if (dialogRef[0] != null) dialogRef[0].dismiss();
+            });
+
+            grid.addView(swatch);
+        }
+
+        dialogRef[0] = (androidx.appcompat.app.AlertDialog) new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.select_colour)
+                .setView(grid)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
-    }
-
-    @Override
-    public void onColorSelection(@NonNull ColorChooserDialog dialog, @ColorInt int selectedColour) {
-        colour = String.format("#%06X", (0xFFFFFF & selectedColour));
-        imageColourSelect.setColorFilter(selectedColour);
-        colourText.setText(colour);
-        DatabaseHelper database = DatabaseHelper.getInstance(this);
-        database.addColour(new Colour(selectedColour, DateAndTimeUtil.toStringDateTimeWithSeconds(Calendar.getInstance())));
-        database.close();
     }
 
     @OnClick(R.id.repeat_row)

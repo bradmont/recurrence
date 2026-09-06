@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="database" path="RECURRENCE_DB"/>
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="database" path="RECURRENCE_DB"/>
+    </device-transfer>
+</data-extraction-rules>

@@ -2,16 +2,16 @@ package com.bleyl.recurrence.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 
-import com.astuetz.PagerSlidingTabStrip;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.tabs.TabLayout;
 import com.bleyl.recurrence.R;
 import com.bleyl.recurrence.adapters.ReminderAdapter;
 import com.bleyl.recurrence.adapters.ViewPageAdapter;
@@ -22,7 +22,7 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity implements ReminderAdapter.RecyclerListener {
 
-    @BindView(R.id.tabs) PagerSlidingTabStrip pagerSlidingTabStrip;
+    @BindView(R.id.tabs) TabLayout tabLayout;
     @BindView(R.id.toolbar) Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.fab_button) FloatingActionButton floatingActionButton;
@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements ReminderAdapter.R
         ViewPageAdapter adapter = new ViewPageAdapter(getSupportFragmentManager());
         viewPager.setAdapter(adapter);
 
-        pagerSlidingTabStrip.setViewPager(viewPager);
-        int pageMargin = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
-        viewPager.setPageMargin(pageMargin);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.getTabAt(0).setIcon(R.drawable.selector_icon_active);
+        tabLayout.getTabAt(1).setIcon(R.drawable.selector_icon_inactive);
     }
 
     @OnClick(R.id.fab_button)
