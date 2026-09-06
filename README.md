@@ -1,3 +1,10 @@
+
+# Revival of Jonas Bleyl's excellent Recurrence
+
+This is a Claude-based port of recurrence to modern Android. The goal was to make minimal changes to be compatible with current APIs, support libraries and Android policies.
+
+I take no credit for the code, it was planned and excuted by ECA with Claude, with a few debug prompts and decisions by me. But others might also find it useful.
+
 # Recurrence
 A minimal notification reminder for Android  
 https://play.google.com/store/apps/details?id=com.bleyl.recurrence
