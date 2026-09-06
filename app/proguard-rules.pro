@@ -1,17 +1,19 @@
-# Butterknife proguard rules
+# ButterKnife
 -keep class butterknife.** { *; }
 -dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
+-keep class **_ViewBinding { *; }
 
 -keepclasseswithmembernames class * {
     @butterknife.* <fields>;
 }
-
 -keepclasseswithmembernames class * {
     @butterknife.* <methods>;
 }
 
-# Material Dialogs proguard rules
--dontwarn
--ignorewarnings
--keep class android.support.design.** { *; }
+# Material Components
+-keep class com.google.android.material.** { *; }
+-dontwarn com.google.android.material.**
+
+# AndroidX
+-keep class androidx.** { *; }
+-dontwarn androidx.**
