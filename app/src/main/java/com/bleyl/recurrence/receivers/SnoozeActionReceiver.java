@@ -19,10 +19,6 @@ public class SnoozeActionReceiver extends BroadcastReceiver {
             AlarmUtil.cancelAlarm(context, alarmIntent, reminderId);
         }
 
-        // Close notification tray
-        Intent closeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        context.sendBroadcast(closeIntent);
-
         Intent snoozeIntent = new Intent(context, SnoozeDialogActivity.class);
         snoozeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         snoozeIntent.putExtra("NOTIFICATION_ID", reminderId);
