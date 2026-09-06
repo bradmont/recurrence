@@ -1,9 +1,10 @@
 package com.bleyl.recurrence.activities;
 
 import android.os.Bundle;
+import android.view.MenuItem;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import android.view.MenuItem;
 
 import com.bleyl.recurrence.R;
 import com.bleyl.recurrence.fragments.PreferenceFragment;
@@ -18,9 +19,8 @@ public class PreferenceActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (toolbar != null) toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-        if (getActionBar() != null) getActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getFragmentManager().beginTransaction().replace(R.id.content_frame, new PreferenceFragment()).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, new PreferenceFragment()).commit();
     }
 
     @Override
