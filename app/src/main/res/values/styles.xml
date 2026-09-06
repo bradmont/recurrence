@@ -10,6 +10,7 @@
         <item name="android:windowTitleStyle">@style/CustomWindowTitle</item>
         <item name="android:windowTitleBackgroundStyle">@style/CustomWindowTitleBackground</item>
         <item name="android:windowNoTitle">false</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionModeOverlay">true</item>
@@ -21,6 +22,7 @@
         <item name="android:dividerHeight">@dimen/line_separator_height</item>
         <item name="android:dialogTheme">@style/Dialog</item>
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
     <style name="AppThemeLight" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionModeOverlay">true</item>
@@ -31,6 +33,7 @@
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:dialogTheme">@style/Dialog</item>
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
+        <item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
     </style>
     <style name="AppThemeDialog" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="windowActionModeOverlay">true</item>
