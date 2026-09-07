@@ -107,16 +107,7 @@ public class NotificationUtil {
             AlarmUtil.setAlarm(context, alarmIntent, reminder.getId(), calendar);
         }
 
-        if (sharedPreferences.getBoolean("checkBoxOngoing", false)) {
-            builder.setOngoing(true);
-        }
-        if (sharedPreferences.getBoolean("checkBoxMarkAsDone", false)) {
-            Intent intent = new Intent(context, DismissReceiver.class);
-            intent.putExtra("NOTIFICATION_ID", reminder.getId());
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, reminder.getId(), intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-            builder.addAction(R.drawable.ic_done_white_24dp, context.getString(R.string.mark_as_done), pendingIntent);
-        }
+
         if (sharedPreferences.getBoolean("checkBoxSnooze", false)) {
             builder.addAction(R.drawable.ic_snooze_white_24dp, context.getString(R.string.snooze), pendingSnooze);
         }

@@ -2,25 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     <PreferenceCategory
         android:title="@string/preference_notification_category">
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="checkBoxVibrate"
-            android:title="@string/checkbox_vibrate"/>
         <Preference
-            android:key="NotificationSound"
-            android:title="@string/checkbox_sound" />
-        <CheckBoxPreference
-            android:defaultValue="true"
-            android:key="checkBoxLED"
-            android:title="@string/checkbox_LED"/>
-        <CheckBoxPreference
-            android:key="checkBoxOngoing"
-            android:title="@string/checkbox_ongoing"
-            android:summary="@string/ongoing_detail"/>
-        <CheckBoxPreference
-            android:key="checkBoxMarkAsDone"
-            android:title="@string/mark_as_done"
-            android:summary="@string/mark_as_done_detail"/>
+            android:key="notificationChannelSettings"
+            android:title="@string/notification_channel_settings"
+            android:summary="@string/notification_channel_settings_summary" />
+
+
         <CheckBoxPreference
             android:key="checkBoxSnooze"
             android:title="@string/snooze"
@@ -32,5 +19,23 @@
         <com.bleyl.recurrence.dialogs.PreferenceNagTimePicker
             android:key="nagInterval"
             android:title="@string/nagging_interval"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/changes_category">
+        <Preference
+            android:key="changeSoundVibrateLed"
+            android:title="@string/change_sound_vibrate_led"
+            android:summary="@string/change_sound_vibrate_led_detail"
+            android:selectable="false" />
+        <Preference
+            android:key="changeOngoing"
+            android:title="@string/change_ongoing"
+            android:summary="@string/change_ongoing_detail"
+            android:selectable="false" />
+        <Preference
+            android:key="changeMarkAsDone"
+            android:title="@string/change_mark_as_done"
+            android:summary="@string/change_mark_as_done_detail"
+            android:selectable="false" />
     </PreferenceCategory>
 </PreferenceScreen>

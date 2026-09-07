@@ -1,14 +1,10 @@
 package com.bleyl.recurrence.fragments;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -18,35 +14,19 @@ import com.bleyl.recurrence.dialogs.PreferenceNagTimePicker;
 
 public class PreferenceFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private ActivityResultLauncher<Intent> ringtonePicker;
-
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         addPreferencesFromResource(R.xml.prefs);
 
-        ringtonePicker = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == Activity.RESULT_OK && result.getData() != null) {
-                    Uri uri = result.getData().getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
-                    String uriString = (uri != null) ? uri.toString() : "";
-                    PreferenceManager.getDefaultSharedPreferences(requireContext())
-                        .edit().putString("NotificationSound", uriString).apply();
-                }
-            });
-
-        Preference soundPref = findPreference("NotificationSound");
-        if (soundPref != null) {
-            soundPref.setOnPreferenceClickListener(pref -> {
-                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
-                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
-                String current = PreferenceManager.getDefaultSharedPreferences(requireContext())
-                    .getString("NotificationSound", "content://settings/system/notification_sound");
-                if (!current.isEmpty()) {
-                    intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, Uri.parse(current));
-                }
-                ringtonePicker.launch(intent);
+        // Open the system notification channel settings for sound, vibration and LED.
+        // These are locked to the channel after first creation and must be changed via the system UI.
+        Preference channelPref = findPreference("notificationChannelSettings");
+        if (channelPref != null) {
+            channelPref.setOnPreferenceClickListener(pref -> {
+                Intent intent = new Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS);
+                intent.putExtra(Settings.EXTRA_APP_PACKAGE, requireContext().getPackageName());
+                intent.putExtra(Settings.EXTRA_CHANNEL_ID, "recurrence_reminders");
+                startActivity(intent);
                 return true;
             });
         }

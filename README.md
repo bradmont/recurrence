@@ -5,6 +5,8 @@ This is a Claude-based port of recurrence to modern Android. The goal was to mak
 
 I take no credit for the code, it was planned and excuted by ECA with Claude, with a few debug prompts and decisions by me. But others might also find it useful.
 
+Testing & debugging in progress.
+
 # Recurrence
 A minimal notification reminder for Android  
 https://play.google.com/store/apps/details?id=com.bleyl.recurrence
