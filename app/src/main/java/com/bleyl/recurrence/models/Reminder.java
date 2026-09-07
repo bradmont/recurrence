@@ -15,6 +15,7 @@ public class Reminder {
     public static final int YEARLY = 5;
     public static final int SPECIFIC_DAYS = 6;
     public static final int ADVANCED = 7;
+    public static final int MINUTELY = 8;
 
     private int id;
     private String title;

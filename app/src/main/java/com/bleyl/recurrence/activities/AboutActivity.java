@@ -36,13 +36,6 @@ public class AboutActivity extends AppCompatActivity {
         versionText.setText(BuildConfig.VERSION_NAME);
     }
 
-    public void launchEmail(View view) {
-        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-        intent.setType("plain/text");
-        intent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{getString(R.string.email)});
-        startActivity(Intent.createChooser(intent, getString(R.string.send_email)));
-    }
-
     public void launchAppURL(View view) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(getString(R.string.app_url)));

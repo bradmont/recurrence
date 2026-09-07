@@ -24,6 +24,9 @@ public class TextFormatUtil {
     public static String formatAdvancedRepeatText(Context context, int repeatType, int interval) {
         String typeText;
         switch (repeatType) {
+            case Reminder.MINUTELY:
+                typeText = context.getResources().getQuantityString(R.plurals.minute, interval);
+                break;
             default:
             case Reminder.HOURLY:
                 typeText = context.getResources().getQuantityString(R.plurals.hour, interval);

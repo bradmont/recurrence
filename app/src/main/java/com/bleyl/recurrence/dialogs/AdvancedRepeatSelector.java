@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.NumberPicker;
 
 import com.bleyl.recurrence.R;
+import com.bleyl.recurrence.models.Reminder;
 
 public class AdvancedRepeatSelector extends DialogFragment {
 
@@ -39,7 +40,7 @@ public class AdvancedRepeatSelector extends DialogFragment {
 
         final NumberPicker repeatPicker = (NumberPicker) view.findViewById(R.id.picker2);
         repeatPicker.setMinValue(0);
-        repeatPicker.setMaxValue(4);
+        repeatPicker.setMaxValue(5);
         repeatPicker.setWrapSelectorWheel(false);
         repeatPicker.setDisplayedValues(getRepeatValues(numberPicker.getValue()));
 
@@ -53,9 +54,18 @@ public class AdvancedRepeatSelector extends DialogFragment {
         builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Explicit map so adding/reordering units never disturbs DB-stored type values
+                final int[] typeMap = {
+                    Reminder.MINUTELY,
+                    Reminder.HOURLY,
+                    Reminder.DAILY,
+                    Reminder.WEEKLY,
+                    Reminder.MONTHLY,
+                    Reminder.YEARLY
+                };
                 String repeatType = repeatPicker.getDisplayedValues()[repeatPicker.getValue()];
                 String text = getString(R.string.repeats_every, numberPicker.getValue(), repeatType);
-                listener.onAdvancedRepeatSelection(repeatPicker.getValue() + 1, numberPicker.getValue(), text);
+                listener.onAdvancedRepeatSelection(typeMap[repeatPicker.getValue()], numberPicker.getValue(), text);
             }
         });
 
@@ -71,12 +81,13 @@ public class AdvancedRepeatSelector extends DialogFragment {
     }
 
     public String[] getRepeatValues(int number) {
-        String[] values = new String[5];
-        values[0] = getResources().getQuantityString(R.plurals.hour, number);
-        values[1] = getResources().getQuantityString(R.plurals.day, number);
-        values[2] = getResources().getQuantityString(R.plurals.week, number);
-        values[3] = getResources().getQuantityString(R.plurals.month, number);
-        values[4] = getResources().getQuantityString(R.plurals.year, number);
+        String[] values = new String[6];
+        values[0] = getResources().getQuantityString(R.plurals.minute, number);
+        values[1] = getResources().getQuantityString(R.plurals.hour, number);
+        values[2] = getResources().getQuantityString(R.plurals.day, number);
+        values[3] = getResources().getQuantityString(R.plurals.week, number);
+        values[4] = getResources().getQuantityString(R.plurals.month, number);
+        values[5] = getResources().getQuantityString(R.plurals.year, number);
         return values;
     }
 }

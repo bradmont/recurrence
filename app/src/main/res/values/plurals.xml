@@ -12,6 +12,10 @@
         <item quantity="other">%d hours</item>
         <item quantity="one">%d hour</item>
     </plurals>
+    <plurals name="minute">
+        <item quantity="other">minutes</item>
+        <item quantity="one">minute</item>
+    </plurals>
     <plurals name="hour">
         <item quantity="other">hours</item>
         <item quantity="one">hour</item>
