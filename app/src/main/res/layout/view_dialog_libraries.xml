@@ -15,30 +15,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tab_title"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/tab_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/tab_link"
-            android:textColor="@color/primary"
-            android:textSize="13sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="monospace"
-            android:text="@string/tab_license"
-            android:textSize="11sp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="@string/butter_knife_title"
             android:textColor="@android:color/black"
             android:textSize="14sp"
@@ -60,29 +36,7 @@
             android:text="@string/butter_knife_license"
             android:textSize="11sp" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/material_dialogs_title"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/material_dialogs_link"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/material_dialogs_link"
-            android:textColor="@color/primary"
-            android:textSize="13sp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingBottom="16dp"
-            android:fontFamily="monospace"
-            android:text="@string/material_dialogs_license"
-            android:textSize="11sp" />
 
     </LinearLayout>
 

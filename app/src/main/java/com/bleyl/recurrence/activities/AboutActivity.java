@@ -59,15 +59,6 @@ public class AboutActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.ok, null);
         builder.show();
 
-        dialogView.findViewById(R.id.tab_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(getString(R.string.tab_link)));
-                startActivity(intent);
-            }
-        });
-
         dialogView.findViewById(R.id.butter_knife_link).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,14 +68,7 @@ public class AboutActivity extends AppCompatActivity {
             }
         });
 
-        dialogView.findViewById(R.id.material_dialogs_link).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(getString(R.string.material_dialogs_link)));
-                startActivity(intent);
-            }
-        });
+
     }
 
     public void showContributorsDialog(View view) {

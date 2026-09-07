@@ -23,7 +23,8 @@
                 android:layout_marginLeft="@dimen/tabs_padding"
                 android:layout_marginStart="@dimen/tabs_padding"
                 android:layout_weight="0.5"
-                android:background="?attr/colorPrimary" />
+                android:background="?attr/colorPrimary"
+                app:tabIconTint="@null" />
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
