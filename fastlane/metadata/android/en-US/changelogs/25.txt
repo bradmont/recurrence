@@ -1,0 +1,13 @@
+Version 1.6 — Android 15 compatibility port
+
+This release modernises the original Recurrence app (by Jonas Bleyl) to build and run on current Android (API 29–35).
+
+Changes:
+* Compatible with Android 10 through Android 15
+* Notification channels added (required since Android 8)
+* Snooze dialog now appears reliably from any app state including home screen and lock screen
+* Notification sound, vibration and LED consolidated into system notification settings
+* Ongoing notification option removed (Android 14 no longer allows third-party apps to enforce this)
+* Mark as done action removed (was redundant with swipe-to-dismiss)
+* Minutes added as a repeat interval option in the advanced repeat selector
+* New application ID: ca.bradstewart.recurrence

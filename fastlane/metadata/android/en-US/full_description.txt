@@ -1,0 +1,19 @@
+Recurrence is a minimal notification reminder app. Set a title, optional content, a time, and how often it should repeat — the app handles the rest via a scheduled notification.
+
+This is a modernised fork of Jonas Bleyl's original Recurrence app, updated to build and run correctly on Android 10 through Android 15.
+
+Features:
+* One-shot or repeating reminders
+* Repeat intervals: by the minute, hour, day, week, month or year
+* Advanced repeat: any number of minutes/hours/days/weeks/months/years
+* Repeat on specific days of the week
+* Snooze with a custom hour/minute duration
+* Nagging mode: re-notifies at a set interval until dismissed
+* Custom icons and colours per reminder
+* No internet permission — works entirely offline
+* No accounts, no tracking, no ads
+
+Changes from the original app (Android 15 compatibility):
+* Notification sound, vibration and LED are now managed through the system notification channel settings (Android 8+ requirement)
+* Ongoing notifications removed — Android 14+ no longer allows third-party apps to prevent notifications being dismissed
+* Minimum Android version raised to Android 10 (API 29)
